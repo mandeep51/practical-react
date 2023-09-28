@@ -1,19 +1,18 @@
 import Items from '@/components/Items';
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
+import { HiOutlineArrowSmallLeft,HiOutlineArrowSmallRight } from 'react-icons/hi';
 
-// Example items, to simulate fetching from another resources.
-const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
-export default function PaginatedItems() {
+export default function PaginatedItems({posts}) {
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(0);
 
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = items.slice(startIndex, endIndex);
+  const currentItems = posts?.slice(startIndex, endIndex);
 
-  const pageCount = Math.ceil(items.length / itemsPerPage);
+  const pageCount = Math.ceil(posts.length / itemsPerPage);
 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
@@ -21,18 +20,19 @@ export default function PaginatedItems() {
 
   return (
     <>
-      <Items currentItems={currentItems} />
+      <Items posts={currentItems} />
       <ReactPaginate
-        breakLabel="..."
-        nextLabel="next >"
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={5}
+       /*  breakLabel="..." */
+        nextLabel="next >"     
+           onPageChange={handlePageClick}
+         pageRangeDisplayed={0} 
         pageCount={pageCount}
         previousLabel="< previous"
-        forcePage={currentPage} // Ensure the correct page is highlighted
+        containerClassName="pagination-container"
+        /* forcePage={currentPage} */ // Ensure the correct page is highlighted
       />
 
-      <p>showing items from {startIndex + 1} to {endIndex <= items.length ? endIndex : items.length}</p>
+      <p>showing items from {startIndex + 1} to {endIndex <= posts?.length ? endIndex : posts?.length}</p>
       <p>page no : {currentPage+1}</p>
     </>
   );
@@ -93,3 +93,13 @@ export default function PaginatedItems() {
 
 // Add a <div id="container"> to your HTML to see the component rendered.
  */
+
+export async function getServerSideProps(context){
+   let res = await fetch("https://jsonplaceholder.typicode.com/posts")
+   let posts = await res.json()
+   return {
+    props:{
+      posts
+    }
+   }
+}

@@ -1,0 +1,15 @@
+/* CSS to hide page numbers */
+.pagination-container  li {
+    display: none;
+  }
+  
+  /* CSS to style Previous and Next buttons */
+  .pagination-container .previous,
+  .pagination-container .next {
+    display: inline-block;
+    margin-right: 10px; /* Add margin for spacing if needed */
+  }
+
+  .pagination-container .selected{
+    color:red;
+  }
